@@ -5,6 +5,7 @@
            [org.apache.mahout.cf.taste.impl.neighborhood NearestNUserNeighborhood]
            [org.apache.mahout.cf.taste.eval RecommenderBuilder ]
            [org.apache.mahout.cf.taste.impl.eval AverageAbsoluteDifferenceRecommenderEvaluator]
+           [org.apache.mahout.common RandomUtils]
            [java.io File]))
 
 ;; Chapter 2.2 Running a first recommender engine
@@ -15,9 +16,20 @@
        similarity (PearsonCorrelationSimilarity. model) 
        neighborhood (NearestNUserNeighborhood. 2 similarity model) 
        recommender  (GenericUserBasedRecommender. model neighborhood 
-                                                  similarity) 
-       builder (reify RecommenderBuilder (buildRecommender [_ _] 
-                                           recommender)) 
-       evaluator (AverageAbsoluteDifferenceRecommenderEvaluator.)] 
-   ;; (.evaluate evaluator nil model 0.7 1.0)
+                                                  similarity)]
     (.recommend recommender 1 1)))
+
+;; Chapter 2.3 Evaluating a Recommender
+(defn evaluator [file]
+  (let [_ (RandomUtils/useTestSeed)
+        file-model (FileDataModel. (File. file))
+        evaluator (AverageAbsoluteDifferenceRecommenderEvaluator.)
+        builder (reify RecommenderBuilder
+                  (buildRecommender [_this model]
+                    (let [similarity (PearsonCorrelationSimilarity. model) 
+                          neighborhood (NearestNUserNeighborhood. 2 similarity model)
+                          recommender  (GenericUserBasedRecommender. model
+                                                                     neighborhood
+                                                                     similarity)]
+                                              recommender)))] 
+    (.evaluate evaluator builder nil file-model 0.7 1.0)))
