@@ -4,8 +4,10 @@ Examples from the [Mahout in Action](http://www.manning.com/owen/) book, ported 
 
 ## Setup
 
-Build and install
+1. Build and install
 [Mahout](https://cwiki.apache.org/MAHOUT/buildingmahout.html)
+
+2. Load the dependencies
 
 ```
 lein deps
@@ -13,7 +15,9 @@ lein deps
 
 ## Usage
 
-TODO
+```
+lein run
+```
 
 ## License
 
