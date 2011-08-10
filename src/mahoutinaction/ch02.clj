@@ -3,8 +3,10 @@
            [org.apache.mahout.cf.taste.impl.similarity PearsonCorrelationSimilarity]
            [org.apache.mahout.cf.taste.impl.recommender GenericUserBasedRecommender]
            [org.apache.mahout.cf.taste.impl.neighborhood NearestNUserNeighborhood]
-           [org.apache.mahout.cf.taste.eval RecommenderBuilder ]
-           [org.apache.mahout.cf.taste.impl.eval AverageAbsoluteDifferenceRecommenderEvaluator]
+           [org.apache.mahout.cf.taste.eval RecommenderBuilder RecommenderIRStatsEvaluator]
+           [org.apache.mahout.cf.taste.impl.eval
+            AverageAbsoluteDifferenceRecommenderEvaluator RMSRecommenderEvaluator
+            GenericRecommenderIRStatsEvaluator]
            [org.apache.mahout.common RandomUtils]
            [java.io File]))
 
@@ -24,6 +26,7 @@
   (let [_ (RandomUtils/useTestSeed)
         file-model (FileDataModel. (File. file))
         evaluator (AverageAbsoluteDifferenceRecommenderEvaluator.)
+        ;; evaluator (RMSRecommenderEvaluator.)
         builder (reify RecommenderBuilder
                   (buildRecommender [_this model]
                     (let [similarity (PearsonCorrelationSimilarity. model) 
@@ -33,3 +36,20 @@
                                                                      similarity)]
                                               recommender)))] 
     (.evaluate evaluator builder nil file-model 0.7 1.0)))
+
+;; 2.4 Precision & Recall
+(defn precision [file]
+  (let [_ (RandomUtils/useTestSeed)
+        file-model (FileDataModel. (File. file))
+        evaluator (GenericRecommenderIRStatsEvaluator.)
+        builder (reify RecommenderBuilder
+                  (buildRecommender [_this model]
+                    (let [similarity (PearsonCorrelationSimilarity. model) 
+                          neighborhood (NearestNUserNeighborhood. 2 similarity model)
+                          recommender  (GenericUserBasedRecommender. model
+                                                                     neighborhood
+                                                                     similarity)]
+                      recommender)))] 
+    (.evaluate evaluator builder nil file-model nil 2
+               GenericRecommenderIRStatsEvaluator/CHOOSE_THRESHOLD
+               1.0)))
