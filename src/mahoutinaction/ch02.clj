@@ -9,6 +9,7 @@
 
 ;; Chapter 2.2 Running a first recommender engine
 ;; (recommend "resources/intro.csv")
+;; via http://groups.google.com/group/clojure/browse_thread/thread/6e01fd108c32d701?pli=1
 (defn recommend [file]
   (let [model (FileDataModel. (File. file)) 
        similarity (PearsonCorrelationSimilarity. model) 
