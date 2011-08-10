@@ -1,6 +1,6 @@
 # mahoutinaction
 
-Examples from the Mahout in Action book, written in Clojure
+Examples from the [Mahout in Action](http://www.manning.com/owen/) book, ported to Clojure
 
 ## Setup
 
