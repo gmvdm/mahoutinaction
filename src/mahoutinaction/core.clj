@@ -1,6 +1,13 @@
 (ns mahoutinaction.core
-  (:use [mahoutinaction.ch02 :as ch02]))
+  (:use [mahoutinaction.ch02 :as ch02]
+        [mahoutinaction.ch03 :as ch03]))
 
+;; Chapter 3
+(defn run-ch03 []
+  (do
+    (let [stats (ch03/precision-boolean "resources/ua.base.gz")]
+      (println (str "Precision: " (.getPrecision stats) " Recall: "
+                    (.getRecall stats))))))
 
 (defn -main []
   (do
