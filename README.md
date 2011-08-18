@@ -24,3 +24,6 @@ lein run
 Copyright (C) 2011 Geoff Wilson
 
 Distributed under the Eclipse Public License, the same as Clojure.
+
+Code under src/java is copied from Mahout and subject to the Apache
+License. See NOTICE.txt and APACHE_LICENSE.txt for details.

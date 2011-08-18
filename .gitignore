@@ -5,3 +5,5 @@ classes
 log
 .DS_Store
 .lein-failures
+resources/ratings.dat
+resources/log4j.properties
